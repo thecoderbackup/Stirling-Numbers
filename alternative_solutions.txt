@@ -1,0 +1,158 @@
+File with alternive solutions to the problem, created by the users that solved this kata.
+
+"
+from functools import cache
+
+@cache
+def stirling_numbers(n, k):
+    if n * k == 0:
+        return (1, 1) if (n, k) == (0, 0) else (0, 0)
+    c1, s1 = stirling_numbers(n-1, k)
+    c2, s2 = stirling_numbers(n-1, k-1)
+    return (n-1)*c1 + c2, k*s1 + s2
+"
+
+
+"
+from functools import lru_cache as memo
+
+@memo(None)
+def c(n, k):
+    if (not n) and (not k): return 1
+    if (not n) or (not k): return 0
+    return (n - 1) * c(n - 1, k) + c(n - 1, k - 1)
+
+@memo(None)
+def S(n, k):
+    if (not n) and (not k): return 1
+    if (not n) or (not k): return 0
+    return k * S(n - 1, k) + S(n - 1, k - 1)
+
+def stirling_numbers(n, k):
+    return (c(n, k), S(n, k))
+"
+
+"
+from functools import cache
+
+def stirling_numbers(n, k):
+    return c(n, k), S(n, k)
+
+@cache
+def c(n, k):
+    return (n - 1) * c(n - 1, k) + c(n - 1, k - 1) if n and k else not (n or k)
+
+@cache
+def S(n, k):
+    return k * S(n - 1, k) + S(n - 1, k - 1) if n and k else not (n or k)
+"
+
+
+"
+def stirling_numbers(n, k):
+    memc = [[-1]*100 for i in range(100)]
+    memS = [[-1]*100 for i in range(100)]
+    def c(n, k):
+        if n == 0:
+            if k == 0:
+                return 1
+            else:
+                return 0
+        else:
+            if memc[n][k] != -1:
+                return memc[n][k]
+            else:
+                memc[n][k] = (n - 1) * c(n - 1, k) + c(n - 1, k - 1)
+                return memc[n][k]
+
+    def S(n, k):
+        if n == 0:
+            if k == 0:
+                return 1
+            else:
+                return 0
+        else:
+            if memS[n][k] != -1:
+                return memS[n][k]
+            else:
+                memS[n][k] = k * S(n - 1, k) + S(n - 1, k - 1)
+                return memS[n][k]
+
+    return ( c(n, k), S(n, k) )
+"
+
+"
+from functools import cache
+
+@cache
+def c(n, k):
+    if n == 0 and k == 0: return 1
+    if n == 0 or k == 0: return 0
+    return (n - 1) * c(n - 1, k) + c(n - 1, k - 1)
+
+@cache
+def S(n, k):
+    if n == 0 and k == 0: return 1
+    if n == 0 or k == 0: return 0
+    return k * S(n - 1, k) + S(n - 1, k - 1)
+
+def stirling_numbers(n, k): return c(n, k), S(n, k)
+"
+
+"
+def c(n, k):
+    dp = [[0] * (k + 1) for _ in range(n + 1)]
+    dp[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(1, k + 1):
+            dp[i][j] = (i - 1) * dp[i - 1][j] + dp[i - 1][j - 1]
+    return dp[n][k]
+
+def S(n, k):
+    dp = [[0] * (k + 1) for _ in range(n + 1)]
+    dp[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(1, k + 1):
+            dp[i][j] = j * dp[i - 1][j] + dp[i - 1][j - 1]
+    return dp[n][k]
+
+def stirling_numbers(n, k):
+    return c(n, k), S(n, k)
+"
+
+"
+from functools import cache
+
+@cache
+def stirling_numbers(n, k):
+    if n == 0: return (k == 0, k == 0)
+    if k == 0: return (0, 0)
+
+    m = stirling_numbers(n-1, k)
+    s = stirling_numbers(n-1, k-1)
+    return ((n-1) * m[0] + s[0], k * m[1] + s[1])
+"
+
+"
+from functools import lru_cache
+@lru_cache
+def stirling_numbers(n, k):
+    if n == 0 and k == 0: return 1, 1
+    if n == 0 or k == 0: return 0, 0
+    c1, s1 = stirling_numbers(n - 1, k)
+    c2, s2 = stirling_numbers(n - 1, k - 1)
+    return (n - 1) * c1 + c2, k * s1 + s2
+"
+
+And this one is my solution.
+
+"
+def stirling_numbers(n, k):
+    if n == 0 and k == 0:
+        return (1, 1)
+    elif n == 0 or k == 0 or k > n:
+        return (0, 0)
+    nkmone = stirling_numbers(n - 1, k - 1)
+    nmone = stirling_numbers(n - 1, k)
+    return ((n - 1) * nmone[0] + nkmone[0], k * nmone[1] + nkmone[1])
+"
